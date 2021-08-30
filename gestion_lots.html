@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+    <div class="mt-5"> 
+
+    
+
+    <div class="col-md-4 float-left" style="position: relative;">
+      <h3 class="title_page_2" >Gestion des lots</h3>
+      <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+    </div>
+
+  <div class="col-md-8 float-left">
+    <div class="form-group col-md-3 float-left">
+        <label >Date</label>
+        <input type="date" name="date" id="date" class="form-control" >
+      </div>
+  <div class="form-group col-md-3 float-left">
+    <label >Poids(kg)</label>
+    <input type="text" name="poids" id="poids" class="form-control" >
+  </div>
+  <div class="form-group col-md-3 float-left">
+    <label >Prix (DH)</label>
+    <input type="text" name="prix" id="prix" class="form-control" >
+  </div>
+ 
+
+ 
+ 
+  <button type="submit" id="submit_lots" class="btn mt-4 btn-primary">Enregistrer</button>
+
+
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Poids</th>
+        <th scope="col">Prix</th>
+        <th scope="col">Date</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody id="liste_lots">
+      
+    </tbody>
+  </table>
+  </div>
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modifier</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label >Date</label>
+                    <input type="date" id="modify_date" class="form-control" value="" >
+                </div>
+                <div class="form-group">
+                    <label >Poids (Kg)</label>
+                    <input type="text" id="modify_poids" class="form-control" value="" >
+                    <input type="hidden" id="id_lot" class="form-control" value="" >
+                </div>
+                
+                <div class="form-group">
+                    <label >Prix (DH)</label>
+                    <input type="text" id="modify_prix" class="form-control" value="" >
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary submit_modify_lots">Modifier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<script>
+$(document).ready(function(){
+
+
+   function sweetAlert(textA,iconA){
+    Swal.fire({
+  title: '',
+  text: textA,
+  icon: iconA,
+  confirmButtonText: 'Ok'
+});
+   }
+
+  $(document).on("click","#submit_lots",function(){
+
+      var poids= $("#poids").val();
+      var prix= $("#prix").val();
+      var date= $("#date").val();
+      
+      if(poids=="") sweetAlert("Poids est obligatoire",'error');
+      else if(prix=="") sweetAlert("Prix est obligatoire",'error');
+      else if(date=="") sweetAlert("Date est obligatoire",'error');
+      else{
+         $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_lots.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'insert_lots=true&poids='+poids+"&prix="+prix+"&date="+date,
+       success : function(data){ 
+           if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+           window.location.href="";
+       }
+    });
+  }
+
+  });
+
+       //START GET LISTE LOTS
+       $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_lots.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'liste=true',
+       success : function(data){ 
+           $('#liste_lots').html(data);
+       }
+     });
+      //END GET LISTE LOTS
+
+
+
+      //START GET DELET LOTS
+      $(document).on("click",".delet_lot",function(){
+          var id_lot=$(this).attr("id_lot");
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_lots.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'delete_lot='+id_lot,
+       success : function(data){ 
+        if(data==1) window.location.href=""; 
+       }
+     });
+    });
+      //END GET DELET LOTS
+
+
+
+      $(document).on("click",".modify_lot",function(){
+          var id_lot=$(this).attr("id_lot");
+          var modify_poids=$(this).attr("modify_poids");
+          var modify_prix=$(this).attr("modify_prix");
+          var modify_date=$(this).attr("modify_date");
+
+           $("#modify_poids").val(modify_poids);
+           $("#modify_prix").val(modify_prix);
+           $("#modify_date").val(modify_date);
+           $("#id_lot").val(id_lot);
+      });
+
+
+       //START MODIFY LOTS
+       $(document).on("click",".submit_modify_lots",function(){
+          var id_lot=$("#id_lot").val();
+          var modify_poids=$("#modify_poids").val();
+          var modify_prix=$("#modify_prix").val();
+          var modify_date=$("#modify_date").val();
+          if(modify_poids=="") sweetAlert("Poids est obligatoire",'error');
+          else if(modify_prix=="") sweetAlert("Prix est obligatoire",'error');
+          else if(modify_date=="") sweetAlert("Date est obligatoire",'error');
+      else{
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_lots.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'modify_lot=true&id_lot='+id_lot+'&modify_poids='+modify_poids+"&modify_prix="+modify_prix+"&modify_date="+modify_date,
+       success : function(data){ 
+        if(data==1) window.location.href=""; 
+       }
+     });
+    }
+    });
+      //END MODIFY LOTS
+
+});
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+  <div class="mt-5"> 
+  <div class="col-md-4 float-left" style="position: relative;">
+    <h3 class="title_page_2" >GESTION <span>financiére</span></h3>
+    <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+  </div>
+    
+
+  
+  <div  class="col-md-8  float-left">
+
+    <div class="col-md-12 float-right">
+        <a href="liste_finance.html" class="btn btn-primary float-right">Liste</a>
+      </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Date</label>
+        <input type="date" name="date" id="date"  class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+    <label >Désignation</label>
+    <input type="text" name="titre" id="titre" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Montant</label>
+        <input type="number" name="montant" id="montant" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Total</label>
+        <input type="number" name="total" id="total" class="form-control" >
+    </div>
+
+    <div class="col-md-12 float-left">
+      <button type="submit" id="submit_finance" class="btn btn-primary mt-4">Enregistrer</button>
+    </div>
+  
+  </div>
+
+  </div>
+
+ 
+    <script>
+        $(document).ready(function(){
+
+
+            function sweetAlert(textA,iconA){
+              Swal.fire({
+               title: '',
+               text: textA,
+               icon: iconA,
+               confirmButtonText: 'Ok'
+                 });
+                 }
+
+      
+
+
+          $(document).on("click","#submit_finance",function(){
+
+             var date= $("#date").val();
+             var titre= $("#titre").val();
+             var montant= $("#montant").val();
+             var total= $("#total").val();
+
+             if(date=="") sweetAlert("Date est obligatoire",'error')
+             else if(titre=="") sweetAlert("Titre est obligatoire",'error');
+             else if(montant=="") sweetAlert("Montant est obligatoire",'error');
+             else if(total=="") sweetAlert("Total est obligatoire",'error');
+             else{
+              $.ajax({
+                   url : 'https://www.proweb.ma/bijoux/module_finance.php',
+                   type : 'POST',
+                   dataType : 'html', 
+                   data : 'insert_finance=true&date='+date+"&titre="+titre+"&montant="+montant+"&total="+total,
+                success : function(data){ 
+                if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+                window.location.href="liste_finance.html";
+               }
+             });
+            }
+
+             });
+
+        });
+    </script>
+
+
+   
+
+
+
+</body>
+</html>

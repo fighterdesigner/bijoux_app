@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+    <div class="container"> 
+
+
+    <h1 class="mt-4">Type de vente</h1>
+    <div class="col-md-12 mt-4 float-left">
+      <div class="form-group col-md-4 float-left">
+        <label >Titre</label>
+        <input type="text" name="titre" id="titre" class="form-control" >
+      </div>
+    
+      <div class="form-group col-md-4 float-left">
+        <label >Réduction (%)</label>
+        <input type="text" name="reduction" id="reduction" class="form-control" >
+      </div>
+
+      <div class="col-md-12 float-left mb-4">
+        <button type="submit" id="submit_type_vente" class="btn btn-primary mt-4">Enregistrer</button>
+      </div>
+
+      </div>
+
+
+
+      <div class="col-md-12 mt-4 float-left">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titre</th>
+            <th scope="col">Réduction</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="liste">
+          
+        </tbody>
+      </table>
+    </div>
+
+
+
+  
+
+    </div>
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modifier</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+  
+            <div class="form-group col-md-4 float-left">
+              <label >Titre</label>
+              <input type="text" name="titre" id="titre_modify" class="form-control" >
+            </div>
+          
+            <div class="form-group col-md-4 float-left">
+              <label >Réduction (%)</label>
+              <input type="text" name="reduction" id="reduction_modify" class="form-control" >
+            </div>
+  
+            <input type="hidden" id="id_type_vente" class="form-control" value="" >
+              
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            <button type="button" class="btn btn-primary submit_modify_type_vente">Modifier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+
+$(document).ready(function(){
+
+    function sweetAlert(textA,iconA){
+    Swal.fire({
+    title: '',
+    text: textA,
+    icon: iconA,
+    confirmButtonText: 'Ok'
+     });
+   }
+
+
+   $(document).on("click","#submit_type_vente",function(){
+
+    var titre= $("#titre").val();
+    var reduction= $("#reduction").val();
+
+      if(titre=="") sweetAlert("Titre est obligatoire",'error')
+      else if(reduction=="") sweetAlert("Réduction est obligatoire",'error');
+      else{
+
+        $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_type_vente.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'insert_type_vente=true&titre='+titre+"&reduction="+reduction,
+       success : function(data){ 
+         console.log(data);
+           if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+           window.location.href="";
+       }
+    });
+
+
+      }
+
+  
+
+   });
+
+
+
+        //START GET LISTE 
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_type_vente.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'liste=true',
+       success : function(data){ 
+           $('#liste').html(data);
+       }
+      });
+      //END GET LISTE
+
+
+        //START GET DETAIL type vente
+        $(document).on("click",".get_type_vente",function(){
+          var id_type_vente=$(this).attr("id_type_vente");
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_type_vente.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'get_type_vente='+id_type_vente,
+       success : function(data){ 
+        data = $.parseJSON(data);
+        console.log(data);
+        
+        $("#titre_modify").val(data.titre);
+        $("#reduction_modify").val(data.reduction);
+        $("#id_type_vente").val(data.type_vente_id);
+
+       }
+     });
+    });
+      //END GET DETAIL type vente
+
+
+         //START MODIFY type de vente
+         $(document).on("click",".submit_modify_type_vente",function(){
+      
+      var titre= $("#titre_modify").val();
+      var reduction= $("#reduction_modify").val();
+      var id_type_vente= $("#id_type_vente").val();
+
+    if(titre=="") sweetAlert("Titre est obligatoire",'error')
+    else if(reduction=="") sweetAlert("Réduction est obligatoire",'error');
+    else{
+    $.ajax({
+     url : 'https://www.proweb.ma/bijoux/module_type_vente.php',
+     type : 'POST',
+     dataType : 'html', 
+     data : "titre="+titre+"&reduction="+reduction+"&modify_type_vente="+id_type_vente,
+     success : function(data){ 
+      if(data==1) window.location.href=""; 
+     }
+   });
+  }
+  });
+
+    //START MODIFY type de vente
+
+
+    
+        //START GET DELET produit
+        $(document).on("click",".delete_type_vente",function(){
+          var id_type_vente=$(this).attr("id_type_vente");
+      
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_type_vente.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'delete_type_vente='+id_type_vente,
+       success : function(data){ 
+        if(data==1) window.location.href=""; 
+       }
+     });
+    });
+      //END GET DELET produit
+
+});
+    </script>
+    </body>
+
+    </html>

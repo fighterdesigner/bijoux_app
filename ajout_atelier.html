@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+  <div class="mt-5"> 
+  <div class="col-md-4 float-left" style="position: relative;">
+    <h3 class="title_page_2" >Matière première</h3>
+    <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+  </div>
+    
+
+  
+  <div  class="col-md-8  float-left">
+
+    <div class="col-md-12 float-right">
+      <a href="liste_atelier.html" class="btn btn-primary float-right">Liste</a>
+    </div>
+  
+
+    <div class="form-group col-md-4 float-left">
+        <label >Date</label>
+        <input type="date" name="date" id="date"  class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+    <label >Poids initiale</label>
+    <input type="number" name="poids_initial" id="poids_initial" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Titre</label>
+        <input type="number" name="titre" id="titre" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Or fin</label>
+        <input type="text" name="or_fin" id="or_fin" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Prix au gramme</label>
+        <input type="text" name="prix_gramme" id="prix_gramme" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+        <label >Total</label>
+        <input type="text" name="total" id="total" class="form-control" >
+    </div>
+
+    
+
+
+    <div class="col-md-12 float-left">
+      <button type="submit" id="submit_atelier" class="btn btn-primary mt-4">Enregistrer</button>
+    </div>
+  
+  </div>
+
+  </div>
+
+ 
+    <script>
+        $(document).ready(function(){
+
+
+            function sweetAlert(textA,iconA){
+              Swal.fire({
+               title: '',
+               text: textA,
+               icon: iconA,
+               confirmButtonText: 'Ok'
+                 });
+                 }
+
+          $('#poids_initial,#titre,#prix_gramme').keyup(function(){
+             var poids_initial = parseFloat($('#poids_initial').val()) || 0;
+             var titre = parseFloat($('#titre').val()) || 0;
+             var prix_gramme = parseFloat($('#prix_gramme').val()) || 0;
+
+             var or_fin= (poids_initial*titre)/750 || 0 ;
+             var total= or_fin*prix_gramme;
+              $('#or_fin').val(or_fin);
+              $('#total').val(total);
+          });
+
+
+          $(document).on("click","#submit_atelier",function(){
+
+             var date= $("#date").val();
+             var poids_initial= $("#poids_initial").val();
+             var titre= $("#titre").val();
+             var prix_gramme= $("#prix_gramme").val();
+
+             if(date=="") sweetAlert("Date est obligatoire",'error')
+             else if(poids_initial=="") sweetAlert("Poids initiale est obligatoire",'error');
+             else if(titre=="") sweetAlert("Titre est obligatoire",'error');
+             else if(prix_gramme=="") sweetAlert("Prix au gramme est obligatoire",'error');
+             else{
+              $.ajax({
+                   url : 'https://www.proweb.ma/bijoux/module_atelier.php',
+                   type : 'POST',
+                   dataType : 'html', 
+                   data : 'insert_atelier=true&date='+date+"&poids_initial="+poids_initial+"&titre="+titre+"&prix_gramme="+prix_gramme,
+                success : function(data){ 
+                if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+                window.location.href="liste_atelier.html";
+               }
+             });
+            }
+
+             });
+
+        });
+    </script>
+
+
+   
+
+
+
+</body>
+</html>

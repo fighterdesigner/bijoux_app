@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+    <div class="mt-5"> 
+
+    
+
+    <div class="col-md-4 float-left" style="position: relative;">
+      <h3 class="title_page_2" >Catégories</h3>
+      <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+    </div>
+
+  <div class="col-md-8 float-left">
+  <div class="form-group col-md-4 float-left">
+    <label >Titre</label>
+    <input type="text" name="lib" id="lib" class="form-control" >
+  </div>
+
+ 
+ 
+  <button type="submit" id="submit_product" class="btn mt-4 btn-primary">Enregistrer</button>
+
+
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titre</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody id="liste_catig">
+      
+    </tbody>
+  </table>
+  </div>
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Modifier</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label >Titre</label>
+                    <input type="text" id="modify_lib" class="form-control" value="" >
+                    <input type="hidden" id="id_catig" class="form-control" value="" >
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary submit_modify_catig">Modifier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<script>
+$(document).ready(function(){
+
+
+   function sweetAlert(textA,iconA){
+    Swal.fire({
+  title: '',
+  text: textA,
+  icon: iconA,
+  confirmButtonText: 'Ok'
+});
+   }
+
+  $(document).on("click","#submit_product",function(){
+
+      var lib= $("#lib").val();
+      
+      if(lib=="") sweetAlert("Titre est obligatoire",'error')
+      else{
+         $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_catig.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'lib='+lib,
+       success : function(data){ 
+           if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+           window.location.href="";
+       }
+    });
+  }
+
+  });
+
+       //START GET LISTE CATIG
+       $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_catig.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'liste=true',
+       success : function(data){ 
+           $('#liste_catig').html(data);
+       }
+     });
+      //END GET LISTE CATIG
+
+
+
+      //START GET DELET CATIG
+      $(document).on("click",".delet_catig",function(){
+          var id_catig=$(this).attr("id_catig");
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_catig.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'delete_catig='+id_catig,
+       success : function(data){ 
+        if(data==1) window.location.href=""; 
+       }
+     });
+    });
+      //END GET DELET CATIG
+
+
+
+      $(document).on("click",".modify_catig",function(){
+        var id_catig=$(this).attr("id_catig");
+          var modify_lib=$(this).attr("modify_lib");
+
+           $("#modify_lib").val(modify_lib);
+           $("#id_catig").val(id_catig);
+      });
+
+
+       //START MODIFY CATIG
+       $(document).on("click",".submit_modify_catig",function(){
+          var id_catig=$("#id_catig").val();
+          var modify_lib=$("#modify_lib").val();
+          if(modify_lib=="") sweetAlert("Titre est obligatoire",'error')
+      else{
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_catig.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'modify_catig='+id_catig+'&modify_lib='+modify_lib,
+       success : function(data){ 
+        if(data==1) window.location.href=""; 
+       }
+     });
+    }
+    });
+      //END MODIFY CATIG
+
+});
+
+
+</script>
+</body>
+</html>

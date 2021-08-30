@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/jquery.scannerdetection.js" ></script>
+</head>
+<body style="background: white;">
+
+    
+
+    <div class=" mt-5">
+
+    <div class="col-lg-12 col-xs-12">
+
+      <div class="col-md-4 float-left" style="position: relative;">
+        <h3 class="title_page_2" >Dashboard</h3>
+        <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+      </div>
+
+      <div  class="col-md-8 float-left">
+        <div class="col-lg-3 col-xs-6 float-left">
+         <a href="liste_cmd.html" style="text-decoration: none;">
+          <div class="small-box " style="background: #D9C059;border-radius: 8px;">
+            <div class="inner">
+              <h3 id="numbre_vente"></h3>
+              <p>Ventes</p>
+            </div>
+            <div class="icon">
+            </div>
+          </div>
+        </a>
+        </div>
+
+             <div class="col-lg-3 col-xs-6 float-left">
+             <a href="liste_produits.html" style="text-decoration: none;">
+          <div class="small-box " style="background: black;border-radius: 8px;">
+            <div class="inner">
+              <h3 id="numbre_prd"></h3>
+              <p>Produits</p>
+            </div>
+            <div class="icon">
+            </div>
+          </div>
+          </a>
+        </div>
+      </div>
+
+    </div>    
+
+    </div>
+
+    <script>
+        $.ajax({
+       url : 'https://www.proweb.ma/bijoux/dashboard.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'get_data=true',
+       success : function(data){ 
+         var data = jQuery.parseJSON(data);
+         //console.log(data);
+          
+           $("#numbre_vente").html(data.numbre_vente);
+           $("#numbre_prd").html(data.numbre_prd);
+       }
+      });
+
+    </script>
+
+<style>
+.small-box > .inner {
+    color: #ffffff;
+    padding: 10px;
+}
+
+</style>
+</body>
+
+
+
+
+</html>

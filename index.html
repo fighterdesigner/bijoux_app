@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+    <div class="mt-5"> 
+    
+    
+  
+  <!--<div class="form-group col-md-4 float-left">
+    <label >Référence</label>
+    <input type="text" name="reference" id="reference" class="form-control" >
+  </div>-->
+
+  <div class="col-md-4 float-left" style="position: relative;">
+    <h3 class="title_page_2" >Produits</h3>
+    <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+  </div>
+
+  <div  class="col-md-8 float-left">
+    <div class="form-group col-md-4 float-left">
+      <label >Catégorie</label>
+      <div id="select_catig"></div>
+    </div>
+
+  <!--<div class="form-group col-md-4 float-left">
+    <label >Référence</label>
+    <input type="text" name="bare_code" id="bare_code" class="form-control" >
+  </div>-->
+
+  <div class="form-group col-md-4 float-left">
+    <label >Date</label>
+    <input type="date" name="date" id="date" class="form-control" >
+    </div>
+
+  <div class="form-group col-md-4 float-left">
+    <label >Désignation</label>
+    <input type="text" name="nom" id="nom" class="form-control" >
+  </div>
+
+  
+
+
+ <!-- <div class="form-group col-md-4 float-left">
+    <label >Gestion par :</label>
+    <select class="form-control" name="type" id="type">
+       <option value="1">Objet</option>
+       <option value="2">Lot</option>
+      </select>
+  </div>-->
+
+    <div class="form-group col-md-4 float-left">
+    <label >Poids (g)</label>
+    <input type="text" name="poids" id="poids" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+    <label >Prix d'achat (DH)</label>
+    <input type="text" name="prix" id="prix"  class="form-control" >
+    </div>
+
+
+    <div class="form-group col-md-4 float-left" id="div_poids_2" style="display: none;">
+      <label >Poids (carrat)</label>
+      <input type="text" name="poids_2" id="poids_2" class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left" id="div_prix_2" style="display: none;">
+      <label >Prix d'achat 2 (DH)</label>
+      <input type="text" name="prix_2" id="prix_2"  class="form-control" >
+    </div>
+
+    <div class="form-group col-md-4 float-left">
+    <label >Quantité en stock</label>
+    <input type="text" name="stock" id="stock" class="form-control" >
+    </div>
+
+
+    <div class="form-group col-md-4 float-left">
+      <label >Fournisseur</label>
+      <!--<div id="select_fournisseur"></div>-->
+      <input type="text" name="fournisseur" id="fournisseur" class="form-control" >
+    </div>
+   
+
+    
+    <div class="form-group col-md-4 float-left">
+    <label >Description</label>
+    <textarea type="text" name="descrp" id="descrp" class="form-control" ></textarea>
+    </div>
+
+    
+ 
+
+    <div class="col-md-12 float-left">
+      <button type="submit" id="submit_product" class="btn btn-primary mt-4">Enregistrer</button>
+    </div>
+  
+    </div>
+
+
+
+    </div>
+
+
+<script>
+
+
+
+
+
+
+$(document).ready(function(){
+
+
+   function sweetAlert(textA,iconA){
+    Swal.fire({
+  title: '',
+  text: textA,
+  icon: iconA,
+  confirmButtonText: 'Ok'
+});
+   }
+
+   $(document).on("change","#catig",function(){
+     
+    var catigA= $(this).val();
+
+    if(catigA==16){
+      $("#div_poids_2").show();
+      $("#div_prix_2").show();
+    }else{
+      $("#div_poids_2").hide();
+      $("#div_prix_2").hide();
+      $("#poids_2").val("");
+       $("#prix_2").val("");
+    }
+
+   });
+
+  $(document).on("click","#submit_product",function(){
+
+      var nom= $("#nom").val();
+      var reference= $("#reference").val();
+      var bare_code= $("#bare_code").val();
+      var poids= $("#poids").val();
+      var prix= $("#prix").val();
+      var stock= $("#stock").val();
+      var descrp= $("#descrp").val();
+      var catig= $("#catig").val();
+      var fournisseur= $("#fournisseur").val();
+      var type= $("#type").val();
+      var date= $("#date").val();
+      var poids_2= $("#poids_2").val();
+      var prix_2= $("#prix_2").val(); 
+      
+      if(nom=="") sweetAlert("Nom est obligatoire",'error')
+      //else if(reference=="") sweetAlert("Référence est obligatoire",'error');
+      //else if(bare_code=="") sweetAlert("Bare code est obligatoire",'error');
+      else if(poids=="") sweetAlert("Poids est obligatoire",'error');
+      else if(prix=="") sweetAlert("Prix est obligatoire",'error');
+      else if(stock=="") sweetAlert("Stock est obligatoire",'error');
+      else if(descrp=="") sweetAlert("description est obligatoire",'error');
+      else{
+         $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_produits.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'insert_produit=true&nom='+nom+"&reference="+reference+"&poids="+poids+"&prix="+prix+"&stock="+stock+"&descrp="+descrp+"&catig="+catig+"&fournisseur="+fournisseur+"&bare_code="+bare_code+"&type="+type+"&date="+date+"&poids_2="+poids_2+"&prix_2="+prix_2,
+       success : function(data){ 
+         console.log(data);
+           if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
+           window.location.href="liste_produits.html";
+       }
+    });
+  }
+  
+  });
+
+
+  //START GET LISTE CATIG SELECT
+  $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_catig.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'select_catig=true',
+       success : function(data){ 
+           $('#select_catig').html(data);
+       }
+     });   
+  //END   GET LISTE CATIG SELECT
+
+
+  
+  //START GET LISTE FOURNISSEUR SELECT
+  $.ajax({
+       url : 'https://www.proweb.ma/bijoux/module_fournisseur.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'select_fournisseur=true',
+       success : function(data){ 
+           $('#select_fournisseur').html(data);
+       }
+     });   
+  //END   GET LISTE FOURNISSEUR SELECT
+
+});
+
+
+</script>
+</body>
+</html>
