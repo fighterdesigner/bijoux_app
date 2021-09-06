@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion bijouterie</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link href="css/sweetalert2.min.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.6.0.min.js" ></script>
+    <script src="js/bootstrap.bundle.min.js" ></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+</head>
+<body style="background: white;">
+    
+    <div class="mt-5"> 
+
+    
+
+    <div class="col-md-4 float-left" style="position: relative;">
+      <h3 class="title_page_2" >Gestion de <span>stock</span></h3>
+      <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
+    </div>
+
+  <div class="col-md-8 float-left">
+
+
+    <div id="liste_stock"> 
+
+
+    </div>
+      
+   
+  </div>
+
+    </div>
+
+
+ 
+
+
+<script>
+$(document).ready(function(){
+
+
+   function sweetAlert(textA,iconA){
+    Swal.fire({
+  title: '',
+  text: textA,
+  icon: iconA,
+  confirmButtonText: 'Ok'
+});
+   }
+
+
+
+       //START GET LISTE LOTS
+       $.ajax({
+       url : 'https://www.proweb.ma/bijoux/gestion_stock.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'liste=true',
+       success : function(data){ 
+           $('#liste_stock').html(data);
+       }
+       });
+        //END GET LISTE LOTS
+
+
+});
+
+
+</script>
+</body>
+</html>

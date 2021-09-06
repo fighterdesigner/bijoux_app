@@ -22,7 +22,7 @@
       <input type="text" id="search_ref" class="form-control" placeholder="Rechercher par référence">
     </div>-->
     <div class="col-md-4 float-left" style="position: relative;">
-      <h3 class="title_page_2" >LISTE <span>DES PRODUITS</span></h3>
+      <h3 class="title_page_2" >LISTE <span>DES ARTICLES</span></h3>
       <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
     </div>
 
@@ -63,7 +63,7 @@
                     <input type="text" name="reference" id="reference" class="form-control" >
                   </div>-->
 
-                  <div class="form-group col-md-4 float-left">
+                  <div class="form-group col-md-3 float-left">
                     <label >Catégorie</label>
                     <div id="select_catig"></div>
                   </div>
@@ -73,12 +73,12 @@
                     <input type="text" name="bare_code" id="bare_code" class="form-control" >
                   </div>-->
 
-                  <div class="form-group col-md-4 float-left">
-                    <label >Date</label>
+                  <div class="form-group col-md-3 float-left">
+                    <label >Date de création d'article</label>
                     <input type="date" name="date" id="date"  class="form-control" >
                   </div>
                 
-                  <div class="form-group col-md-4 float-left">
+                  <div class="form-group col-md-3 float-left">
                     <label >Désignation</label>
                     <input type="text" name="nom" id="nom" class="form-control" >
                   </div>
@@ -93,43 +93,53 @@
                       </select>
                   </div>-->
 
-                    <div class="form-group col-md-4 float-left">
+                    <div class="form-group col-md-3 float-left">
                     <label >Poids (g)</label>
                     <input type="text" name="poids" id="poids" class="form-control" >
                     </div>
 
                   
+                    <div class="form-group col-md-3 float-left">
+                      <label >Prix au gramme  (DH)</label>
+                      <input type="text" name="prix_gramme" id="prix_gramme"  class="form-control" >
+                      </div>
                 
-                    <div class="form-group col-md-4 float-left">
-                    <label >Prix d'achat  (DH)</label>
-                    <input type="text" name="prix" id="prix"  class="form-control" >
-                    </div>
+                  
 
-                    <div class="form-group col-md-4 float-left" id="div_poids_2" style="display: none;">
+                    <div class="form-group col-md-3 float-left" id="div_poids_2" style="display: none;">
                       <label >Poids (carrat)</label>
                       <input type="text" name="poids_2" id="poids_2" class="form-control" >
                     </div>
                 
-                    <div class="form-group col-md-4 float-left" id="div_prix_2" style="display: none;">
+                    <div class="form-group col-md-3 float-left" id="div_prix_2" style="display: none;">
                       <label >Prix d'achat 2 (DH)</label>
                       <input type="text" name="prix_2" id="prix_2"  class="form-control" >
                     </div>
 
+                    <div class="form-group col-md-3 float-left">
+                      <label >Prix d'achat  (DH)</label>
+                      <input type="text" disabled name="prix" id="prix"  class="form-control" >
+                      </div>
+
+                      <div class="form-group col-md-3 float-left">
+                        <label >Prix de vente (DH)</label>
+                        <input type="text" name="prix_vente" id="prix_vente"  class="form-control" >
+                      </div>
                    
                 
-                    <div class="form-group col-md-4 float-left">
+                    <div class="form-group col-md-3 float-left">
                     <label >Quantité</label>
                     <input type="text" name="stock" id="stock" class="form-control" >
                     </div>
 
-                    <div class="form-group col-md-4 float-left">
+                    <div class="form-group col-md-3 float-left">
                       <label >Fournisseur</label>
                       <!--<div id="select_fournisseur"></div>-->
                       <input type="text" name="fournisseur" id="fournisseur" class="form-control" >
                     </div>
                 
                     
-                    <div class="form-group col-md-4 float-left">
+                    <div class="form-group col-md-3 float-left">
                     <label >Description</label>
                     <textarea type="text" name="descrp" id="descrp" class="form-control" ></textarea>
                     </div>
@@ -161,6 +171,23 @@ $(document).ready(function(){
   confirmButtonText: 'Ok'
 });
    }
+
+
+   $('#poids,#prix_gramme,#poids_2,#prix_2').keyup(function(){
+             var poids = parseFloat($('#poids').val()) || 0;
+             var prix_gramme = parseFloat($('#prix_gramme').val()) || 0;
+             var poids_2 = parseFloat($('#poids_2').val()) || 0;
+             var prix_2 = parseFloat($('#prix_2').val()) || 0;
+             var catig= $("#catig").val();
+
+             if(catig==16){
+                 var prix_achat=(poids*prix_gramme)+(poids_2*prix_2);
+             }else{
+                 var prix_achat=(poids*prix_gramme);
+             }
+
+              $('#prix').val(prix_achat);
+          });
 
 
 
@@ -242,6 +269,8 @@ $(document).ready(function(){
         $("#date").val(data.date);
         $("#prix_2").val(data.prix_2);
         $("#poids_2").val(data.poids_2);
+        $("#prix_gramme").val(data.prix_gramme);
+        $("#prix_vente").val(data.prix_vente);
         
         if(data.catig==16){
          $("#div_poids_2").show();
@@ -293,11 +322,11 @@ $(document).ready(function(){
        var type= $("#type").val();
        var date= $("#date").val();
        var poids_2= $("#poids_2").val();
-      var prix_2= $("#prix_2").val(); 
+       var prix_2= $("#prix_2").val(); 
+       var prix_gramme= $("#prix_gramme").val(); 
+       var prix_vente= $("#prix_vente").val();
 
-       if(nom=="") sweetAlert("Nom est obligatoire",'error')
-      //else if(reference=="") sweetAlert("Référence est obligatoire",'error');
-      //else if(bare_code=="") sweetAlert("Bare code est obligatoire",'error');
+       if(nom=="") sweetAlert("Nom est obligatoire",'error');
       else if(poids=="") sweetAlert("Poids est obligatoire",'error');
       else if(prix=="") sweetAlert("Prix est obligatoire",'error');
       else if(stock=="") sweetAlert("Stock est obligatoire",'error');
@@ -308,7 +337,7 @@ $(document).ready(function(){
        url : 'https://www.proweb.ma/bijoux/module_produits.php',
        type : 'POST',
        dataType : 'html', 
-       data : 'catig='+catig+'&nom='+nom+"&reference="+reference+"&poids="+poids+"&prix="+prix+"&stock="+stock+"&descrp="+descrp+"&modify_product="+id_produit+"&fournisseur="+fournisseur+"&bare_code="+bare_code+"&type="+type+"&date="+date+"&poids_2="+poids_2+"&prix_2="+prix_2,
+       data : 'catig='+catig+'&nom='+nom+"&reference="+reference+"&poids="+poids+"&prix="+prix+"&stock="+stock+"&descrp="+descrp+"&modify_product="+id_produit+"&fournisseur="+fournisseur+"&bare_code="+bare_code+"&type="+type+"&date="+date+"&poids_2="+poids_2+"&prix_2="+prix_2+"&prix_gramme="+prix_gramme+"&prix_vente="+prix_vente,
        success : function(data){ 
         if(data==1) window.location.href=""; 
        }
@@ -391,7 +420,7 @@ $(document).ready(function(){
        }
      });
        });
-      //END   CREATE BARCODE
+      //END   CREATE TICKET
 
 
 

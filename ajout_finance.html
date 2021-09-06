@@ -44,10 +44,7 @@
         <input type="number" name="montant" id="montant" class="form-control" >
     </div>
 
-    <div class="form-group col-md-4 float-left">
-        <label >Total</label>
-        <input type="number" name="total" id="total" class="form-control" >
-    </div>
+
 
     <div class="col-md-12 float-left">
       <button type="submit" id="submit_finance" class="btn btn-primary mt-4">Enregistrer</button>
@@ -79,18 +76,16 @@
              var date= $("#date").val();
              var titre= $("#titre").val();
              var montant= $("#montant").val();
-             var total= $("#total").val();
 
              if(date=="") sweetAlert("Date est obligatoire",'error')
              else if(titre=="") sweetAlert("Titre est obligatoire",'error');
              else if(montant=="") sweetAlert("Montant est obligatoire",'error');
-             else if(total=="") sweetAlert("Total est obligatoire",'error');
              else{
               $.ajax({
                    url : 'https://www.proweb.ma/bijoux/module_finance.php',
                    type : 'POST',
                    dataType : 'html', 
-                   data : 'insert_finance=true&date='+date+"&titre="+titre+"&montant="+montant+"&total="+total,
+                   data : 'insert_finance=true&date='+date+"&titre="+titre+"&montant="+montant,
                 success : function(data){ 
                 if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');
                 window.location.href="liste_finance.html";

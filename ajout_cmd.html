@@ -109,22 +109,25 @@
   <fieldset style="border: double;padding: revert;">
     <legend style="width: auto;color:#D9C059;font-weight: bold;">Mode de paiement : </legend>
     <div class="form-group col-md-12 float-left">
+      
       <div class="form-check form-check-inline">
-        <input class="form-check-input " name="mode_paiement" type="radio" checked value="1" id="defaultCheck3">
+        <input class="form-check-input mode_paiement" name="mode_paiement" type="radio" checked value="2"  id="defaultCheck4">
+        <label class="form-check-label" for="defaultCheck4">
+          Par chéque
+        </label>
+      </div>
+      
+      <div class="form-check form-check-inline">
+        <input class="form-check-input mode_paiement" name="mode_paiement" type="radio"  value="1" id="defaultCheck3">
         <label class="form-check-label" for="defaultCheck3">
           Par carte bancaire
         </label>
       </div>
 
-      <div class="form-check form-check-inline">
-        <input class="form-check-input " name="mode_paiement" type="radio" value="2"  id="defaultCheck4">
-        <label class="form-check-label" for="defaultCheck4">
-          Par chéque
-        </label>
-      </div>
+    
 
       <div class="form-check form-check-inline">
-        <input class="form-check-input " name="mode_paiement" type="radio" value="3"  id="defaultCheck5">
+        <input class="form-check-input mode_paiement" name="mode_paiement" type="radio" value="3"  id="defaultCheck5">
         <label class="form-check-label" for="defaultCheck5">
           Par virement
         </label>
@@ -140,13 +143,20 @@
     <div class="form-group col-md-12 float-left">
   
       <div class="div_paiement">
-      <div class="form-group col-md-6 float-left">
+      <div class="form-group col-md-4 float-left">
         <label >Montant</label>
         <input type="text"  name="montant"  class="form-control">
       </div>
-      <div class="form-group col-md-6 float-left">
+      <div class="form-group col-md-4 float-left">
         <label >Date</label>
         <input type="date"  name="date_montant"  class="form-control">
+      </div>
+      <div class="form-group col-md-4 float-left div_encaisse">
+        <label >Encaissé</label>
+        <div class="switch">
+          <input type="checkbox"  name="encaisse" id="encaisse1" class="form-control" />
+          <label for="encaisse1"></label>
+        </div>
       </div>
       </div>
 
@@ -216,44 +226,56 @@
           </div>
           <div class="modal-body">
              
-            <div class="form-group col-md-4 float-left">
+            <div class="form-group col-md-3 float-left">
               <label >Catégorie</label>
               <div id="select_catig"></div>
             </div>
 
-            <div class="form-group col-md-4 float-left">
-              <label >Date</label>
+            <div class="form-group col-md-3 float-left">
+              <label >Date de création d'article</label>
               <input type="date" name="date_produit_lot" id="date_produit_lot" class="form-control" >
               </div>
 
-            <div class="form-group col-md-4 float-left">
-              <label >Désignation</label>
+            <div class="form-group col-md-3 float-left">
+              <label id="label_designation">Désignation</label>
               <input type="text" name="name_product_lot" id="name_product_lot" class="form-control" >
             </div>
           
       
           
-              <div class="form-group col-md-4 float-left">
+              <div class="form-group col-md-3 float-left">
               <label >Poids (g)</label>
               <input type="text" name="poids_lot" id="poids_lot" class="form-control" >
               </div>
-          
-              <div class="form-group col-md-4 float-left">
-              <label >Prix d'achat (DH)</label>
-              <input type="text" name="prix_lot" id="prix_lot"  class="form-control" >
-              </div>
 
-              <div class="form-group col-md-4 float-left" id="div_poids_2" style="display: none;">
+              <div class="form-group col-md-3 float-left">
+                <label >Prix au gramme (DH)</label>
+                <input type="text" name="prix_gramme_lot" id="prix_gramme_lot"  class="form-control" >
+              </div>
+          
+             
+
+              <div class="form-group col-md-3 float-left" id="div_poids_2" style="display: none;">
                 <label >Poids (carrat)</label>
                 <input type="text" name="poids_2_lot" id="poids_2_lot" class="form-control" >
               </div>
           
-              <div class="form-group col-md-4 float-left" id="div_prix_2" style="display: none;">
+              <div class="form-group col-md-3 float-left" id="div_prix_2" style="display: none;">
                 <label >Prix d'achat 2 (DH)</label>
                 <input type="text" name="prix_2_lot" id="prix_2_lot"  class="form-control" >
               </div>
 
-              <div class="form-group col-md-4 float-left">
+              <div class="form-group col-md-3 float-left">
+                <label >Prix d'achat (DH)</label>
+                <input type="text" name="prix_lot" id="prix_lot"  class="form-control" >
+                </div>
+
+                <div class="form-group col-md-3 float-left">
+                  <label >Prix de vente (DH)</label>
+                  <input type="text" name="prix_vente_lot" id="prix_vente_lot"  class="form-control" >
+                </div>
+
+              <div class="form-group col-md-3 float-left">
                 <label >Fournisseur</label>
                 <input type="text" name="fournisseur_lot" id="fournisseur_lot" class="form-control" >
               </div>
@@ -282,6 +304,13 @@ confirmButtonText: 'Ok'
 }
 
 
+   $(document).on('change','.mode_paiement',function(){
+      var mode_paiement=$(this).val();
+      if(mode_paiement==2) $('.div_encaisse').show();
+      else $('.div_encaisse').hide();
+
+   });
+
 $(document).on("change","#catig",function(){
      
      var catigA= $(this).val();
@@ -289,11 +318,13 @@ $(document).on("change","#catig",function(){
      if(catigA==16){
        $("#div_poids_2").show();
        $("#div_prix_2").show();
+       $('#label_designation').text("Remarque");
      }else{
        $("#div_poids_2").hide();
        $("#div_prix_2").hide();
        $("#poids_2_lot").val("");
        $("#prix_2_lot").val("");
+       $('#label_designation').text("Désignation");
      }
  
     })
@@ -312,15 +343,23 @@ $(document).on("change","#catig",function(){
 
    //START AJOUT PAIEMENT
     $(document).on("click",".ajouter_montant",function(){
-       console.log("ee");
+      var rndm = 1 + Math.floor(Math.random() * 999999);
+
       var html_paiement='<div class="div_paiement">\
-      <div class="form-group col-md-6 float-left">\
+      <div class="form-group col-md-4 float-left">\
         <label >Montant</label>\
         <input type="text"  name="montant"  class="form-control">\
       </div>\
-      <div class="form-group col-md-6 float-left">\
+      <div class="form-group col-md-4 float-left">\
         <label >Date</label>\
         <input type="date"  name="date_montant"  class="form-control">\
+      </div>\
+      <div class="form-group col-md-4 float-left div_encaisse">\
+        <label >Encaissé</label>\
+        <div class="switch">\
+          <input type="checkbox"  name="encaisse" id="encaisse'+rndm+'" class="form-control" />\
+          <label for="encaisse'+rndm+'"></label>\
+        </div>\
       </div>\
       </div>';
 
@@ -541,7 +580,7 @@ $(document).on("change","#catig",function(){
       
        
 
-       if(name_product_lot=="") sweetAlert("Désignation est obligatoire",'error')
+       if(name_product_lot=="") sweetAlert("Désignation est obligatoire",'error');
        else if(poids_lot=="") sweetAlert("Poids est obligatoire",'error');
        else if(prix_lot=="") sweetAlert("Prix est obligatoire",'error');
        else if(date_produit_lot=="") sweetAlert("Date est obligatoire",'error');
@@ -644,8 +683,14 @@ $(document).on("change","#catig",function(){
 
 
        $(document).on("click",".submit_form",function(){
+        var fruits=[];
         var serializObjct = $("form").serializeObject();
+        $("input:checkbox").each(function(){
+          serializObjct[this.name] = fruits.push(this.checked);
+       });
+       serializObjct["encaisse"]=fruits;
         console.log(serializObjct);
+
         $.ajax({
            url : 'https://www.proweb.ma/bijoux/save_cmd.php',
            type : 'POST',
@@ -656,6 +701,7 @@ $(document).on("change","#catig",function(){
             window.location.href="detail_cmd.html?id="+data;
           }
         });
+        
        });
 
        //END SEND FORM
@@ -676,6 +722,47 @@ $(document).on("change","#catig",function(){
   .fa-trash-o{
     color : red;
   }
+
+  /*.switch {
+  display: inline-flex;
+  margin: 0 10px;
+}*/
+.switch input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+.switch input[type=checkbox]:checked + label {
+  background: #D9C059;
+}
+.switch input[type=checkbox]:checked + label::after {
+  left: calc(100% - 4px);
+  transform: translateX(-100%);
+}
+.switch label {
+  cursor: pointer;
+  width: 48px;
+  height: 24px;
+  background: grey;
+  display: block;
+  border-radius: 24px;
+  position: relative;
+}
+.switch label::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+.div_paiement {
+    width: 100%;
+    float: left;
+}
 </style>
     </body>
 

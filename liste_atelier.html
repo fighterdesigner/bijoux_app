@@ -20,7 +20,7 @@
   
   
     <div class="col-md-4 float-left" style="position: relative;">
-      <h3 class="title_page_2" >Matière première </h3>
+      <h3 class="title_page_2" >Matière <span>première</span> </h3>
       <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
     </div>
 
@@ -30,6 +30,7 @@
         <a href="ajout_atelier.html" class="btn btn-primary float-right">Ajout</a>
       </div>
 
+      <h4>Prix moyenne : <span id="prix_moyenne"></span> dh</h4>
   <table class="table table-bordered ">
     <thead>
       <tr>
@@ -76,7 +77,10 @@ $(document).ready(function(){
        dataType : 'html', 
        data : 'liste=true',
        success : function(data){ 
-           $('#liste').html(data);
+         console.log(data);
+         var data=$.parseJSON(data);
+           $('#liste').html(data.html);
+           $('#prix_moyenne').html(data.prix_moyenne);
        }
      });
       //END GET LISTE 
@@ -104,7 +108,29 @@ $(document).ready(function(){
 
 
       
-
+       //START CREATE TICKET
+      $(document).on("click",".imprimer",function(){
+      var id_atelier=$(this).attr("id_atelier");
+      $.ajax({
+       url : 'https://www.proweb.ma/bijoux/imprimer_matiere_premiere.php',
+       type : 'POST',
+       dataType : 'html', 
+       data : 'id_atelier='+id_atelier, 
+       success : function(data){ 
+       console.log(data);
+       var v= Math.floor(Math.random() * 102586) + 1   
+       if(data){
+       var a = document.createElement('a');
+       a.href = 'https://www.proweb.ma/bijoux/impression_mp/'+data+'.pdf?v='+v;
+       a.download = "output.png";
+       document.body.appendChild(a);
+       a.click();
+       document.body.removeChild(a);
+      }
+       }
+     });
+       });
+      //END   CREATE BARCODE
 
      
 

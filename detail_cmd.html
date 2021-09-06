@@ -64,22 +64,25 @@
            <fieldset style="border: double;padding: revert;">
             <legend style="width: auto;">Mode de paiement:</legend>
             <div class="form-group col-md-12 float-left">
+             
+             
               <div class="form-check form-check-inline">
-                <input class="form-check-input " name="mode_paiement" type="radio" checked value="1" id="defaultCheck3">
+                <input class="form-check-input mode_paiement" name="mode_paiement" type="radio" checked value="2"  id="defaultCheck4">
+                <label class="form-check-label" for="defaultCheck4">
+                  Par chéque
+                </label>
+              </div>
+
+              <div class="form-check form-check-inline">
+                <input class="form-check-input mode_paiement" name="mode_paiement" type="radio"  value="1" id="defaultCheck3">
                 <label class="form-check-label" for="defaultCheck3">
                   Par carte bancaire
                 </label>
               </div>
         
-              <div class="form-check form-check-inline">
-                <input class="form-check-input " name="mode_paiement" type="radio" value="2"  id="defaultCheck4">
-                <label class="form-check-label" for="defaultCheck4">
-                  Par chéque
-                </label>
-              </div>
         
               <div class="form-check form-check-inline">
-                <input class="form-check-input " name="mode_paiement" type="radio" value="3"  id="defaultCheck5">
+                <input class="form-check-input mode_paiement" name="mode_paiement" type="radio" value="3"  id="defaultCheck5">
                 <label class="form-check-label" for="defaultCheck5">
                   Par virement
                 </label>
@@ -96,13 +99,20 @@
             <div class="form-group col-md-12 float-left">
             <input type="hidden" name="id_cmd" id="id_cmd" value="">
               <div class="div_paiement">
-              <div class="form-group col-md-6 float-left">
+              <div class="form-group col-md-4 float-left">
                 <label >Montant</label>
                 <input type="text"  name="montant"  class="form-control">
               </div>
-              <div class="form-group col-md-6 float-left">
+              <div class="form-group col-md-4 float-left">
                 <label >Date</label>
                 <input type="date"  name="date_montant"  class="form-control">
+              </div>
+              <div class="form-group col-md-4 float-left div_encaisse">
+                <label >Encaissé</label>
+                <div class="switch">
+                  <input type="checkbox"  name="encaisse" id="encaisse1" class="form-control" />
+                  <label for="encaisse1"></label>
+                </div>
               </div>
               </div>
         
@@ -210,14 +220,22 @@
           //START AJOUT PAIEMENT
     $(document).on("click",".ajouter_montant",function(){
        console.log("ee");
+       var rndm = 1 + Math.floor(Math.random() * 999999);
       var html_paiement='<div class="div_paiement">\
-      <div class="form-group col-md-6 float-left">\
+      <div class="form-group col-md-4 float-left">\
         <label >Montant</label>\
         <input type="text"  name="montant"  class="form-control">\
       </div>\
-      <div class="form-group col-md-6 float-left">\
+      <div class="form-group col-md-4 float-left">\
         <label >Date</label>\
         <input type="date"  name="date_montant"  class="form-control">\
+      </div>\
+      <div class="form-group col-md-4 float-left div_encaisse">\
+        <label >Encaissé</label>\
+        <div class="switch">\
+          <input type="checkbox"  name="encaisse" id="encaisse'+rndm+'" class="form-control" />\
+          <label for="encaisse'+rndm+'"></label>\
+        </div>\
       </div>\
       </div>';
 
@@ -264,8 +282,21 @@
     };
 
 
+
+    $(document).on('change','.mode_paiement',function(){
+      var mode_paiement=$(this).val();
+      if(mode_paiement==2) $('.div_encaisse').show();
+      else $('.div_encaisse').hide();
+
+   });
+   
        $(document).on("click",".submit_form",function(){
+        var fruits=[];
         var serializObjct = $("form").serializeObject();
+        $("input:checkbox").each(function(){
+          serializObjct[this.name] = fruits.push(this.checked);
+       });
+       serializObjct["encaisse"]=fruits;
         console.log(serializObjct);
         $.ajax({
            url : 'https://www.proweb.ma/bijoux/save_acompte.php',
@@ -690,7 +721,42 @@ img {
     transform: rotate(45deg);
 }
 
-
+.switch input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+.switch input[type=checkbox]:checked + label {
+  background: #D9C059;
+}
+.switch input[type=checkbox]:checked + label::after {
+  left: calc(100% - 4px);
+  transform: translateX(-100%);
+}
+.switch label {
+  cursor: pointer;
+  width: 48px;
+  height: 24px;
+  background: grey;
+  display: block;
+  border-radius: 24px;
+  position: relative;
+}
+.switch label::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+.div_paiement {
+    width: 100%;
+    float: left;
+}
      </style>
 
     </body>

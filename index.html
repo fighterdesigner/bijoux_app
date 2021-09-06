@@ -23,12 +23,12 @@
   </div>-->
 
   <div class="col-md-4 float-left" style="position: relative;">
-    <h3 class="title_page_2" >Produits</h3>
+    <h3 class="title_page_2" >Articles</h3>
     <img  src="images/bijoux.jpg" style="max-width: 100%;height: 100%;">
   </div>
 
   <div  class="col-md-8 float-left">
-    <div class="form-group col-md-4 float-left">
+    <div class="form-group col-md-3 float-left">
       <label >Catégorie</label>
       <div id="select_catig"></div>
     </div>
@@ -38,13 +38,13 @@
     <input type="text" name="bare_code" id="bare_code" class="form-control" >
   </div>-->
 
-  <div class="form-group col-md-4 float-left">
-    <label >Date</label>
+  <div class="form-group col-md-3 float-left">
+    <label >Date de création d'article</label>
     <input type="date" name="date" id="date" class="form-control" >
     </div>
 
-  <div class="form-group col-md-4 float-left">
-    <label >Désignation</label>
+  <div class="form-group col-md-3 float-left">
+    <label id="label_designation">Désignation</label>
     <input type="text" name="nom" id="nom" class="form-control" >
   </div>
 
@@ -59,34 +59,47 @@
       </select>
   </div>-->
 
-    <div class="form-group col-md-4 float-left">
+    <div class="form-group col-md-3 float-left">
     <label >Poids (g)</label>
     <input type="text" name="poids" id="poids" class="form-control" >
     </div>
 
-    <div class="form-group col-md-4 float-left">
-    <label >Prix d'achat (DH)</label>
-    <input type="text" name="prix" id="prix"  class="form-control" >
+
+    <div class="form-group col-md-3 float-left">
+      <label >Prix au gramme (DH)</label>
+      <input type="text" name="prix_gramme" id="prix_gramme"  class="form-control" >
     </div>
 
+  
 
-    <div class="form-group col-md-4 float-left" id="div_poids_2" style="display: none;">
+
+    <div class="form-group col-md-3 float-left" id="div_poids_2" style="display: none;">
       <label >Poids (carrat)</label>
       <input type="text" name="poids_2" id="poids_2" class="form-control" >
     </div>
 
-    <div class="form-group col-md-4 float-left" id="div_prix_2" style="display: none;">
-      <label >Prix d'achat 2 (DH)</label>
+    <div class="form-group col-md-3 float-left" id="div_prix_2" style="display: none;">
+      <label >Prix au carrat (DH)</label>
       <input type="text" name="prix_2" id="prix_2"  class="form-control" >
     </div>
 
-    <div class="form-group col-md-4 float-left">
+    <div class="form-group col-md-3 float-left">
+      <label >Prix d'achat (DH)</label>
+      <input type="text" disabled name="prix" id="prix"  class="form-control" >
+      </div>
+
+    <div class="form-group col-md-3 float-left">
+      <label >Prix de vente (DH)</label>
+      <input type="text" name="prix_vente" id="prix_vente"  class="form-control" >
+    </div>
+
+    <div class="form-group col-md-3 float-left">
     <label >Quantité en stock</label>
     <input type="text" name="stock" id="stock" class="form-control" >
     </div>
 
 
-    <div class="form-group col-md-4 float-left">
+    <div class="form-group col-md-3 float-left">
       <label >Fournisseur</label>
       <!--<div id="select_fournisseur"></div>-->
       <input type="text" name="fournisseur" id="fournisseur" class="form-control" >
@@ -94,7 +107,7 @@
    
 
     
-    <div class="form-group col-md-4 float-left">
+    <div class="form-group col-md-3 float-left">
     <label >Description</label>
     <textarea type="text" name="descrp" id="descrp" class="form-control" ></textarea>
     </div>
@@ -132,6 +145,24 @@ $(document).ready(function(){
 });
    }
 
+
+   $('#poids,#prix_gramme,#poids_2,#prix_2').keyup(function(){
+             var poids = parseFloat($('#poids').val()) || 0;
+             var prix_gramme = parseFloat($('#prix_gramme').val()) || 0;
+             var poids_2 = parseFloat($('#poids_2').val()) || 0;
+             var prix_2 = parseFloat($('#prix_2').val()) || 0;
+             var catig= $("#catig").val();
+
+             if(catig==16){
+                 var prix_achat=(poids*prix_gramme)+(poids_2*prix_2);
+             }else{
+              var prix_achat=(poids*prix_gramme);
+             }
+
+              $('#prix').val(prix_achat);
+             
+          });
+
    $(document).on("change","#catig",function(){
      
     var catigA= $(this).val();
@@ -139,11 +170,13 @@ $(document).ready(function(){
     if(catigA==16){
       $("#div_poids_2").show();
       $("#div_prix_2").show();
+      $('#label_designation').text("Remarque");
     }else{
       $("#div_poids_2").hide();
       $("#div_prix_2").hide();
       $("#poids_2").val("");
-       $("#prix_2").val("");
+      $("#prix_2").val("");
+      $('#label_designation').text("Désignation");
     }
 
    });
@@ -162,21 +195,19 @@ $(document).ready(function(){
       var type= $("#type").val();
       var date= $("#date").val();
       var poids_2= $("#poids_2").val();
-      var prix_2= $("#prix_2").val(); 
+      var prix_2= $("#prix_2").val();
+      var prix_gramme= $("#prix_gramme").val(); 
+      var prix_vente= $("#prix_vente").val(); 
       
-      if(nom=="") sweetAlert("Nom est obligatoire",'error')
-      //else if(reference=="") sweetAlert("Référence est obligatoire",'error');
-      //else if(bare_code=="") sweetAlert("Bare code est obligatoire",'error');
-      else if(poids=="") sweetAlert("Poids est obligatoire",'error');
-      else if(prix=="") sweetAlert("Prix est obligatoire",'error');
+      if(poids=="") sweetAlert("Poids est obligatoire",'error');
+      else if(prix_gramme=="") sweetAlert("Prix au gramme est obligatoire",'error');
       else if(stock=="") sweetAlert("Stock est obligatoire",'error');
-      else if(descrp=="") sweetAlert("description est obligatoire",'error');
       else{
          $.ajax({
        url : 'https://www.proweb.ma/bijoux/module_produits.php',
        type : 'POST',
        dataType : 'html', 
-       data : 'insert_produit=true&nom='+nom+"&reference="+reference+"&poids="+poids+"&prix="+prix+"&stock="+stock+"&descrp="+descrp+"&catig="+catig+"&fournisseur="+fournisseur+"&bare_code="+bare_code+"&type="+type+"&date="+date+"&poids_2="+poids_2+"&prix_2="+prix_2,
+       data : 'insert_produit=true&nom='+nom+"&reference="+reference+"&poids="+poids+"&prix="+prix+"&stock="+stock+"&descrp="+descrp+"&catig="+catig+"&fournisseur="+fournisseur+"&bare_code="+bare_code+"&type="+type+"&date="+date+"&poids_2="+poids_2+"&prix_2="+prix_2+"&prix_gramme="+prix_gramme+"&prix_vente="+prix_vente,
        success : function(data){ 
          console.log(data);
            if(data==1) sweetAlert("Votre enregistrement a été ajouté avec succès.",'success');

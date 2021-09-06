@@ -45,7 +45,7 @@ function createWindow () {
     },
 
     {
-      label: 'Produits',
+      label: 'Articles',
       submenu: [
           {
             label:'Catégorie',
@@ -54,14 +54,14 @@ function createWindow () {
           }
         },
           {
-            label:'Ajouter un produit',
+            label:'Ajouter un article',
             click() { 
               win.loadFile('index.html');
           }
         },
 
         {
-          label:'Liste des produits',
+          label:'Liste des articles',
           click() { 
             win.loadFile('liste_produits.html');
         },
@@ -73,7 +73,14 @@ function createWindow () {
           win.loadFile('gestion_lots.html');
       },
       
-    }
+    },
+    {
+      label:'Gestion de stock initiale',
+      click() { 
+        win.loadFile('stock_initiale.html');
+    },
+    
+  }
        
           
       ]
@@ -158,12 +165,19 @@ function createWindow () {
         }
         },
         {
-          label:'Réception de produit fiscale',
+          label:'Réception de produit finale',
           click() { 
             win.loadFile('ajout_produit_fiscale.html');
         }
         },
       ]
+    },
+    {
+    
+      label: 'Gestion de stock',
+         click() { 
+            win.loadFile('gestion_stock.html');
+        }
     },
    
 ])
