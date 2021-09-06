@@ -14,10 +14,6 @@ function createWindow () {
   var menu = Menu.buildFromTemplate([
 
     {
-      label: "",
-      role: 'TODO'
-    },
-    {
     
       label: 'Menu',
       submenu: [
@@ -33,19 +29,35 @@ function createWindow () {
       ]
 
     },
-        {
+   
+    {
     
       label: 'Dashboard',
-         click() { 
+      submenu: [
+        {
+          label:'Dashboard',
+          click() { 
             win.loadFile('dashboard.html');
         }
+        },
+       
+      ]
+
     },
+
     {
     
       label: 'Gestion des frais',
-         click() { 
+      submenu: [
+        {
+          label:'Gestion des frais',
+          click() { 
             win.loadFile('frais.html');
         }
+        },
+       
+      ]
+
     },
 
     {
@@ -176,13 +188,22 @@ function createWindow () {
         },
       ]
     },
+
     {
     
       label: 'Gestion de stock',
-         click() { 
+      submenu: [
+        {
+          label:'Gestion de stock',
+          click() { 
             win.loadFile('gestion_stock.html');
+        }
         },
+       
+     
+      ]
     },
+
    
 ])
 Menu.setApplicationMenu(menu); 
