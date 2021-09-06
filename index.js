@@ -14,6 +14,10 @@ function createWindow () {
   var menu = Menu.buildFromTemplate([
 
     {
+      label: "",
+      role: 'TODO'
+    },
+    {
     
       label: 'Menu',
       submenu: [
@@ -177,7 +181,7 @@ function createWindow () {
       label: 'Gestion de stock',
          click() { 
             win.loadFile('gestion_stock.html');
-        }
+        },
     },
    
 ])
